@@ -3,7 +3,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 
 class PostSerializer(serializers.HyperlinkedModelSerializer):
-    author = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    author = serializers.ReadOnlyField(source='author.username')
 
     class Meta:
         model = Post

@@ -4,10 +4,17 @@ from .models import Post
 from .forms import PostForm
 from rest_framework import viewsets
 from .serializers import PostSerializer
+from rest_framework import permissions
 
 class blogImage(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        # API로 POST 요청(create)이 오면,
+        # 토큰을 보낸 사용자(self.request.user)를 'author' 필드에 자동으로 저장
+        serializer.save(author=self.request.user)
 
 # Create your views here.
 def post_list(request):
